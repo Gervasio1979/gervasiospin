@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Tigre da Sorte PRO</title>
+    <style>
+        :root {
+            --primary-color: #FFD700;
+            --secondary-color: #8B4513;
+            --background-gradient: linear-gradient(45deg, #2F4F4F, #1a1a1a);
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background: var(--background-gradient);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .game-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            border: 3px solid var(--primary-color);
+            max-width: 800px;
+            width: 90%;
+        }
+
+        .slot-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 2rem 0;
+            perspective: 1000px;
+        }
+
+        .slot-cell {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            font-size: 3rem;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--secondary-color);
+        }
+
+        .slot-cell::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(45deg) translateX(-200%); }
+            100% { transform: rotate(45deg) translateX(200%); }
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 2rem;
+        }
+
+        .bet-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: var(--primary-color);
+            color: black;
+            transform: scale(1.05);
+        }
+
+        .win-animation {
+            animation: winBlink 0.5s infinite;
+        }
+
+        @keyframes winBlink {
+            0%, 100% { background-color: rgba(255, 215, 0, 0.3); }
+            50% { background-color: rgba(255, 0, 0, 0.3); }
+        }
+
+        .credits {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .jackpot-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff0000, #ffd700);
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        .credit-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .add-credits-btn {
+            background: #00ff00 !important;
+            color: #000 !important;
+            margin: 10px 0;
+        }
+
+        .diamond-rain {
+            position: fixed;
+            top: -50px;
+            font-size: 30px;
+            animation: rain 3s linear forwards;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        @keyframes rain {
+            0% {
+                transform: translateY(-100%) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            button {
+                padding: 15px;
+                font-size: 1rem;
+            }
+        }
+		
+        .jackpot-counter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff0000, #ffd700);
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .jackpot-counter {
+                position: absolute;
+                top: 80px; /* Posição abaixo do título */
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90%;
+                text-align: center;
+                font-size: 1rem;
+                padding: 10px 15px;
+            }
+			            .jackpot-counter1 {
+                position: absolute;
+                top: 120px; /* Posição abaixo do título */
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90%;
+                text-align: center;
+                font-size: 1rem;
+                padding: 10px 15px;
+            }
+
+            h1 {
+                position:absolute;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                text-align: center;
+                font-size: 1.5rem;
+                margin: 0;
+                padding: 10px;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 1000;
+            }
+
+            .game-container {
+                margin-top: 140px; /* Espaço para os elementos fixos */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="jackpot-counter">CAIXA: <span id="jackpotValue">5000</span></div>
+    <div class="jackpot-counter1">CAIXA RESERVA: <span id="jackpotValue">5000</span> </div>
+
+    <h1>🎰 TIGRE DA SORTE PRO 🐅</h1>
+    
+    <div class="game-container">
+        <div class="credits">CRÉDITOS: <span id="credit">1000</span></div>
+        
+        <div class="slot-grid" id="slotGrid">
+            <div class="slot-cell"></div>
+            <div class="slot-cell"></div>
+            <div class="slot-cell"></div>
+            <div class="slot-cell"></div>
+            <div class="slot-cell"></div>
+            <div class="slot-cell"></div>
+            <div class="slot-cell"></div>
+            <div class="slot-cell"></div>
+            <div class="slot-cell"></div>
+        </div>
+
+        <div class="controls">
+            <div class="bet-control">
+                <button onclick="changeBet(-1)">-</button>
+                <span style="font-size: 1.2rem">APOSTA: <span id="currentBet">5</span></span>
+                <button onclick="changeBet(1)">+</button>
+            </div>
+            <button onclick="spin()" id="spinButton">GIRAR! (5x)</button>
+            <button onclick="toggleAutoSpin()" id="autoSpinBtn">AUTO (0)</button>
+            <button onclick="showPaytable()">PAGAMENTOS</button>
+            <button onclick="showAddCredits()" class="add-credits-btn">+ CRÉDITOS</button>
+        </div>
+    </div>
+
+    <div class="modal" id="creditModal">
+        <h2>RECARREGAR CRÉDITOS</h2>
+        <div class="credit-options">
+            <button onclick="addCredits(500)">+ 500</button>
+            <button onclick="addCredits(1000)">+ 1000</button>
+            <button onclick="addCredits(5000)">+ 5000</button>
+        </div>
+        <button onclick="closeModal()" style="margin-top:15px">Fechar</button>
+    </div>
+
+    <div class="modal" id="paytableModal">
+        <h2>TABELA DE PAGAMENTOS</h2>
+        <div id="paytableContent"></div>
+        <button onclick="closeModal()" style="margin-top:15px">Fechar</button>
+    </div>
+
+    <script>
+        let credit = 1000;
+        let currentBet = 5;
+        let isSpinning = false;
+        let jackpot = 5000;
+        let autoSpinCount = 0;
+        let autoSpinInterval;
+        
+        const symbols = [
+            { char: '🐅', multiplier: 50, name: 'Tigre Dourado' },
+            { char: '🔥', multiplier: 30, name: 'Fogo' },
+            { char: '💎', multiplier: 100, name: 'Diamante' },
+            { char: '🍒', multiplier: 10, name: 'Cereja' },
+            { char: '🪙', multiplier: 20, name: 'Moeda' },
+            { char: '7️⃣', multiplier: 200, name: 'Sete Dourado' }
+        ];
+
+        const paylines = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        function updateCredit(amount) {
+            credit += amount;
+            document.getElementById('credit').textContent = credit;
+            if(credit <= 0) {
+                document.getElementById('spinButton').disabled = true;
+                showAddCredits();
+            }
+        }
+
+        function changeBet(change) {
+            currentBet = Math.max(5, Math.min(100, currentBet + change * 5));
+            document.getElementById('currentBet').textContent = currentBet;
+            document.getElementById('spinButton').textContent = `GIRAR! (${currentBet}x)`;
+        }
+
+        async function spin() {
+            if (isSpinning || credit < currentBet) return;
+            
+            isSpinning = true;
+            updateCredit(-currentBet);
+            jackpot += currentBet * 0.1;
+            document.getElementById('jackpotValue').textContent = jackpot;
+
+            const cells = document.querySelectorAll('.slot-cell');
+            let spins = 15;
+            
+            const spinInterval = setInterval(() => {
+                cells.forEach(cell => {
+                    cell.textContent = symbols[Math.floor(Math.random() * symbols.length)].char;
+                    cell.style.transform = `rotateX(${Math.random() * 360}deg)`;
+                });
+                
+                if (spins-- <= 0) {
+                    clearInterval(spinInterval);
+                    revealResults();
+                }
+            }, 100);
+        }
+
+        function revealResults() {
+            const cells = document.querySelectorAll('.slot-cell');
+            const results = [];
+            
+            cells.forEach((cell, index) => {
+                const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+                results[index] = symbol;
+                
+                setTimeout(() => {
+                    cell.textContent = symbol.char;
+                    cell.style.transform = 'rotateX(0)';
+                }, index * 100);
+            });
+
+            setTimeout(() => checkWins(results), 900);
+        }
+
+        function checkWins(results) {
+            let totalWin = 0;
+            const winningCells = new Set();
+            
+            // Verifica se todos os 9 símbolos são '7️⃣'
+            const allSevens = results.filter(s => s.char === '7️⃣').length === 9;
+            if (allSevens) {
+                totalWin += jackpot;
+                jackpot = 5000;
+                document.getElementById('jackpotValue').textContent = jackpot;
+                createDiamondRain(); // Adiciona a animação de chuva de diamantes
+            }
+
+            paylines.forEach(line => {
+                const [a, b, c] = line;
+                if (results[a].char === results[b].char && results[b].char === results[c].char) {
+                    totalWin += currentBet * results[a].multiplier;
+                    line.forEach(index => winningCells.add(index));
+                }
+            });
+
+            if (totalWin > 0) {
+                updateCredit(totalWin);
+                showWinAnimation(Array.from(winningCells));
+                showWinMessage(totalWin);
+            }
+            
+            isSpinning = false;
+        }
+
+        // Função para criar a animação de chuva de diamantes
+        function createDiamondRain() {
+            const duration = 3000;
+            const diamondsCount = 50;
+
+            for(let i = 0; i < diamondsCount; i++) {
+                const diamond = document.createElement('div');
+                diamond.className = 'diamond-rain';
+                diamond.textContent = '💎';
+                diamond.style.left = Math.random() * 100 + '%';
+                diamond.style.animationDelay = Math.random() * 1 + 's';
+                document.body.appendChild(diamond);
+                setTimeout(() => diamond.remove(), duration);
+            }
+        }
+
+        function showWinAnimation(cellIndices) {
+            const cells = document.querySelectorAll('.slot-cell');
+            cellIndices.forEach(index => {
+                cells[index].classList.add('win-animation');
+                setTimeout(() => cells[index].classList.remove('win-animation'), 2000);
+            });
+        }
+
+        function showWinMessage(amount) {
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <h2>🎉 GRANDE PRÊMIO! 🎉</h2>
+                <p>${amount.toLocaleString()} créditos ganhos!</p>
+                <button onclick="this.parentElement.remove()">OK</button>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function toggleAutoSpin() {
+            if(autoSpinInterval) {
+                clearInterval(autoSpinInterval);
+                autoSpinInterval = null;
+                document.getElementById('autoSpinBtn').textContent = 'AUTO (0)';
+            } else {
+                const count = prompt("Quantos giros automáticos?", "10");
+                if(count > 0 && count <= 100) {
+                    autoSpinCount = count;
+                    document.getElementById('autoSpinBtn').textContent = `AUTO (${count})`;
+                    autoSpinInterval = setInterval(() => {
+                        if(autoSpinCount > 0 && credit >= currentBet) {
+                            spin();
+                            autoSpinCount--;
+                            document.getElementById('autoSpinBtn').textContent = `AUTO (${autoSpinCount})`;
+                        } else {
+                            clearInterval(autoSpinInterval);
+                            autoSpinInterval = null;
+                        }
+                    }, 2000);
+                }
+            }
+        }
+
+        function showAddCredits() {
+            document.getElementById('creditModal').style.display = 'block';
+        }
+
+        function addCredits(amount) {
+            updateCredit(amount);
+            document.getElementById('spinButton').disabled = false;
+            closeModal();
+        }
+
+        function showPaytable() {
+            const modal = document.getElementById('paytableModal');
+            modal.style.display = 'block';
+            document.getElementById('paytableContent').innerHTML = symbols.map(symbol => `
+                <div style="margin:10px 0;padding:10px;border-bottom:1px solid #333">
+                    ${symbol.char} ${symbol.name} - ${symbol.multiplier}x
+                </div>
+            `).join('');
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
