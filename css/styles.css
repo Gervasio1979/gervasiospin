@@ -1,0 +1,564 @@
+body {
+    font-family: Arial, sans-serif;
+    border: 0px solid #2A1F00;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    min-height: 100vh;
+}
+
+.geral {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* Estilos do topo */
+.topo {
+    border: 1px solid #2A1F00;
+    width: 100%;
+    height: 35vh;
+    display: flex;
+    background: url(../images/topo.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Estilos da página com slot machine */
+.pagina {
+    border: 1px solid #2A1F00;
+    height: 30vh;
+    display: flex;
+    justify-content: space-between; background:url(../images/fundo%20campo.JPG);
+	    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.pagina-esquerda, .pagina-direita {
+    border: 1px solid #2A1F00;
+    width: 15%;
+    height: 100%;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    background: url(../images/lado%20esquerdo.JPG);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.pagina-meio {
+    position: relative;
+    width: 70%;
+    height: 100%;
+}
+
+/* Estilos da sub-página */
+.sub-pagina {
+    border: 1px solid #2A1F00;
+    height: 5vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; background:url(../images/fundo%20campo.JPG);
+		    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.sub-pagina-esquerda, .sub-pagina-meio, .sub-pagina-direita {
+    border: 1px solid #2A1F00;
+    height: 80%;
+    width: 28%;
+    margin: 5px;
+    background: url(../images/fundo%20campo.JPG);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.5em;
+}
+
+/* Estilos do rodapé */
+.rodape {
+    border: 1px solid #2A1F00;
+    height: 20vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: url(../images/fundo%20rodape.JPG);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.rodape-esquerda {
+    height: 40%;
+    width: 30%;
+    margin: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url(../images/fundo%20turbo.JPG);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: transform 0.2s; /* Efeito ao clicar */
+}
+
+.rodape-esquerda.turbo-ativo {
+    border: 2px solid #ffd700;
+}
+
+.rodape-esquerda:active {
+    transform: scale(0.95); /* Efeito de clique */
+}
+
+.rodape-aposta {
+    height: 40%;
+    width: 30%;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+	      background: url(../images/fundoauto.JPG); /* Adicione uma imagem de fundo para parecer botão */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: transform 0.2s; /* Efeito ao clicar */
+}
+
+.rodape-meio {
+    height: 70%;
+    width: 70%;
+    margin: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    margin-top: -30px;
+}
+
+.rodape-aposta2 {
+    height: 40%;
+    width: 30%;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url(../images/fundoauto.JPG); /* Adicione uma imagem de fundo para parecer botão */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: transform 0.2s; /* Efeito ao clicar */
+}
+
+.rodape-aposta2:active {
+    transform: scale(0.95); /* Efeito de clique */
+}
+
+.rodape-direita {
+    height: 40%;
+    width: 30%;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+      background: url(../images/fundoauto.JPG); /* Adicione uma imagem de fundo para parecer botão */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: transform 0.2s; /* Efeito ao clicar */
+}
+
+.rodape-direita:active {
+    transform: scale(0.95); /* Efeito de clique */
+}
+
+/* Estilo para as imagens do rodapé */
+.rodape-img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+/* Estilos da grade de rifa */
+.rifa-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 3px;
+    border: 1px solid #000;
+    margin: 0px;
+    height: 120px;
+    background: url(../images/campo.JPG);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.rifa-number {
+    background: #FFF;
+    border: 1px solid #000;
+    color: #000;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 2.5vw;
+    cursor: pointer;
+}
+
+.saldo-texto {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #FF6;
+    font-size: 3em;
+    text-align: center;
+    width: 100%;
+    overflow: hidden;
+}
+
+.mensagem-animada {
+    display: inline-block;
+    font-size: 0.8em;
+    color: #FF6;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Media queries para responsividade */
+@media (max-width: 768px) {
+    .topo, .pagina, .sub-pagina, .rodape {
+        height: auto;
+    }
+    .pagina-esquerda, .pagina-direita, .sub-pagina-esquerda, .sub-pagina-meio, .sub-pagina-direita {
+        width: 40%;
+    }
+    .pagina-meio {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .rifa-number {
+        font-size: 5vw;
+    }
+    .saldo-texto {
+        font-size: 2em;
+    }
+}
+
+/* Estilos dos rolos da slot machine */
+.rolos-container {
+    display: flex;
+    gap: 30px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    border-radius: 10px; 
+    margin-top: 5px;
+}
+
+.rolo {
+    width: 260px;
+    height: 550px;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(45deg, #2b0000, #4a0000);
+    border: 2px solid #ffd700;
+    border-radius: 5px;
+}
+
+.simbolos {
+    position: absolute;
+    width: 100%;
+    margin-top: -200px;
+}
+
+.simbolo {
+    height: 195px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+@keyframes rolar {
+    0% { transform: translateY(-2000px); }
+    100% { transform: translateY(0); }
+}
+
+/* Estilos dos controles e botões */
+.controls {
+    text-align: center;
+    margin-top: 10px;
+}
+
+button {
+    background: #ffd700;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    box-shadow: 0 0 10px #ffd700;
+    transition: transform 0.2s;
+}
+
+
+
+
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+.blink {
+    animation: blink 1s infinite;
+}
+
+/* Estilos dos modais (aposta e pagamentos) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a1a1a, #333);
+    margin: 80% auto;
+    padding: 50px;
+    border: 2px solid #ffd700;
+    width: 100%;
+    max-width: 700px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+    animation: modalFadeIn 0.3s ease-in-out;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close {
+    color: #ffd700;
+    float: right;
+    font-size: 36px;
+    font-weight: bold;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #ff0000;
+    transform: scale(1.2);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    color: #ffd700;
+    font-size: 5em;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+}
+
+.opcoes-aposta, .pagamentos-grid {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
+    justify-content: center;
+}
+
+.opcao-aposta {
+    padding: 20px 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(45deg, #ff4500, #ffa500);
+    border: 2px solid #ffd700;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 69, 0, 0.5);
+}
+
+.opcao-aposta:hover {
+    background: linear-gradient(45deg, #ffa500, #ff4500);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(255, 69, 0, 0.8);
+}
+
+.opcao-aposta:active {
+    transform: scale(0.95);
+}
+
+.pagamento-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.pagamento-item img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+    border: 2px solid #ffd700;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #2b0000, #4a0000);
+    object-fit: contain;
+}
+
+/* Estilos do overlay da combinação vencedora */
+.overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 10;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-content {
+    position: relative;
+    text-align: center;
+}
+
+.overlay-close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.overlay-close:hover,
+.overlay-close:focus {
+    color: #ffd700;
+}
+
+#imagemCombinacao {
+    max-width: 90%;
+    max-height: 90%;
+    border: 5px solid #ffd700;
+    border-radius: 10px;
+}
+
+.ganho-texto {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #FF6;
+    font-size: 2em;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    transition: opacity 0.5s ease-out;
+}
+
+.ganho-texto.fade-out {
+    opacity: 0;
+}
+
+.rodape-meio img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    cursor: pointer;
+    animation: girarDevagar 4s linear infinite; /* Giro lento padrão (4 segundos por rotação) */
+}
+
+.rodape-meio img.girarRapido {
+    animation: girarRapido 1.33s linear infinite; /* 300% mais rápido (4s / 3 = 1.33s) */
+}
+
+.rodape-meio img.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    animation: none;
+}
+
+@keyframes girarDevagar {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes girarRapido {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); } /* Mantém a rotação completa, mas mais rápida */
+}
+
+
+
+/* Estilos para o modal de giros automáticos */
+.opcoes-giros {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
+    justify-content: center;
+}
+
+.opcao-giros {
+    padding: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(45deg, #ff4500, #ffa500);
+    border: 2px solid #ffd700;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 69, 0, 0.5);
+}
+
+.opcao-giros:hover {
+    background: linear-gradient(45deg, #ffa500, #ff4500);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(255, 69, 0, 0.8);
+}
+
+.opcao-giros:active {
+    transform: scale(0.95);
+}
