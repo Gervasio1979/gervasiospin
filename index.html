@@ -1,0 +1,1103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Jogo do Palhaço - Slot Machine</title>
+    <style>
+        /* Conteúdo do styles.css */
+        body {
+            font-family: Arial, sans-serif;
+            border: 0px solid #2A1F00;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .geral {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .topo {
+            border: 1px solid #2A1F00;
+            width: 100%;
+            height: 35vh;
+            display: flex;
+            background: url(images/topo.jpg);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .pagina {
+            border: 1px solid #2A1F00;
+            height: 30vh;
+            display: flex;
+            justify-content: space-between;
+            background: url(images/fundo%20campo.JPG);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .pagina-esquerda, .pagina-direita {
+            border: 1px solid #2A1F00;
+            width: 15%;
+            height: 100%;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            background: url(images/lado%20esquerdo.JPG);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .pagina-meio {
+            position: relative;
+            width: 70%;
+            height: 100%;
+        }
+
+        .sub-pagina {
+            border: 1px solid #2A1F00;
+            height: 5vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: url(images/fundo%20campo.JPG);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .sub-pagina-esquerda, .sub-pagina-meio, .sub-pagina-direita {
+            border: 1px solid #2A1F00;
+            height: 80%;
+            width: 28%;
+            margin: 5px;
+            background: url(images/fundo%20campo.JPG);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        .rodape {
+            border: 1px solid #2A1F00;
+            height: 20vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: url(images/fundo%20rodape.JPG);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .rodape-esquerda {
+            height: 40%;
+            width: 30%;
+            margin: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url(images/fundo%20turbo.JPG);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .rodape-esquerda.turbo-ativo {
+            border: 2px solid #ffd700;
+        }
+
+        .rodape-esquerda:active {
+            transform: scale(0.95);
+        }
+
+        .rodape-aposta {
+            height: 40%;
+            width: 30%;
+            margin: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .rodape-meio {
+            height: 70%;
+            width: 70%;
+            margin: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            margin-top: -30px;
+        }
+
+        .rodape-aposta2 {
+            height: 40%;
+            width: 30%;
+            margin: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url(images/fundo%20botao.JPG);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .rodape-aposta2:active {
+            transform: scale(0.95);
+        }
+
+        .rodape-direita {
+            height: 40%;
+            width: 30%;
+            margin: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url(images/fundo%20botao.JPG);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .rodape-direita:active {
+            transform: scale(0.95);
+        }
+
+        .rifa-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 3px;
+            border: 1px solid #000;
+            margin: 0px;
+            height: 120px;
+            background: url(images/campo.JPG);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .rifa-number {
+            background: #FFF;
+            border: 1px solid #000;
+            color: #000;
+            text-align: center;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 2.5vw;
+            cursor: pointer;
+        }
+
+        .saldo-texto {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FF6;
+            font-size: 3em;
+            text-align: center;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .mensagem-animada {
+            display: inline-block;
+            font-size: 0.8em;
+            color: #FF6;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .topo, .pagina, .sub-pagina, .rodape {
+                height: auto;
+            }
+            .pagina-esquerda, .pagina-direita, .sub-pagina-esquerda, .sub-pagina-meio, .sub-pagina-direita {
+                width: 40%;
+            }
+            .pagina-meio {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .rifa-number {
+                font-size: 5vw;
+            }
+            .saldo-texto {
+                font-size: 2em;
+            }
+        }
+
+        .rolos-container {
+            display: flex;
+            gap: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+
+        .rolo {
+            width: 260px;
+            height: 550px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(45deg, #2b0000, #4a0000);
+            border: 2px solid #ffd700;
+            border-radius: 5px;
+        }
+
+        .simbolos {
+            position: absolute;
+            width: 100%;
+            margin-top: -200px;
+        }
+
+        .simbolo {
+            height: 195px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        @keyframes rolar {
+            0% { transform: translateY(-1800px); }
+            100% { transform: translateY(0); }
+        }
+
+        button {
+            background: #ffd700;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            box-shadow: 0 0 10px #ffd700;
+            transition: transform 0.2s;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .blink {
+            animation: blink 1s infinite;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a, #333);
+            margin: 80% auto;
+            padding: 50px;
+            border: 2px solid #ffd700;
+            width: 100%;
+            max-width: 700px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+            animation: modalFadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close {
+            color: #ffd700;
+            float: right;
+            font-size: 36px;
+            font-weight: bold;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #ff0000;
+            transform: scale(1.2);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content h2 {
+            color: #ffd700;
+            font-size: 5em;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+        }
+
+        .opcoes-aposta, .pagamentos-grid, .opcoes-giros {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .opcao-aposta, .opcao-giros {
+            padding: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(45deg, #ff4500, #ffa500);
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.5);
+        }
+
+        .opcao-aposta:hover,.opcao-giros:hover {
+            background: linear-gradient(45deg, #ffa500, #ff4500);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 69, 0, 0.8);
+        }
+
+        .opcao-aposta:active,.opcao-giros:active {
+            transform: scale(0.95);
+        }
+
+        .pagamento-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .pagamento-item img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #2b0000, #4a0000);
+            object-fit: contain;
+        }
+
+        .overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 10;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay-content {
+            position: relative;
+            text-align: center;
+        }
+
+        .overlay-close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .overlay-close:hover,
+        .overlay-close:focus {
+            color: #ffd700;
+        }
+
+        #imagemCombinacao {
+            max-width: 90%;
+            max-height: 90%;
+            border: 5px solid #ffd700;
+            border-radius: 10px;
+        }
+
+        .ganho-texto {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #FF6;
+            font-size: 2em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            transition: opacity 0.5s ease-out;
+        }
+
+        .ganho-texto.fade-out {
+            opacity: 0;
+        }
+
+        .rodape-meio img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            cursor: pointer;
+            animation: girarDevagar 4s linear infinite;
+        }
+
+        .rodape-meio img.girarRapido {
+            animation: girarRapido 1.33s linear infinite;
+        }
+
+        .rodape-meio img.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+            animation: none;
+        }
+
+        @keyframes girarDevagar {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes girarRapido {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .rodape-img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="geral">
+        <div class="topo">
+            <div class="box-topo"></div>
+        </div>
+        
+        <div class="pagina">
+            <div class="pagina-esquerda"></div>
+            <div class="pagina-meio">
+                <div class="rolos-container">
+                    <div class="rolo"><div class="simbolos" id="rolo1"></div></div>
+                    <div class="rolo"><div class="simbolos" id="rolo2"></div></div>
+                    <div class="rolo"><div class="simbolos" id="rolo3"></div></div>
+                </div>
+                <div id="overlayCombinacao" class="overlay">
+                    <div class="overlay-content">
+                        <span class="overlay-close">×</span>
+                        <img id="imagemCombinacao" src="" alt="Combinação Vencedora">
+                        <span id="ganho-texto" class="ganho-texto"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="pagina-direita"></div>
+        </div>
+        
+        <div class="rifa-grid" id="rifa-grid">
+            <h2 class="saldo-texto">
+                <p id="resultado"></p>
+                <span class="mensagem-animada">BEM-VINDO AO JOGO DO PALHAÇO</span>
+            </h2>
+        </div>
+        
+        <div class="sub-pagina">
+            <div class="sub-pagina-esquerda">Créditos: <span id="creditos">R$20,00</span></div>
+            <div class="sub-pagina-meio">Valor da aposta: <span id="valorAposta">R$1,00</span></div>
+            <div class="sub-pagina-direita">Caixa: R$0,00</div>
+        </div>
+
+        <div class="rodape">
+            <div class="rodape-esquerda" onclick="toggleTurbo()">
+                <img src="images/turbo_icon.png" alt="Turbo" class="rodape-img">
+            </div>
+            <div class="rodape-aposta" onclick="mostrarModalPagamentos()">
+                <img src="images/pagamentos_icon.png" alt="Tabela de Pagamentos" class="rodape-img">
+            </div>
+            <div class="rodape-meio">
+                <img src="images/btngirar.png" onclick="girarRolos()" alt="Girar">
+            </div>
+            <div class="rodape-aposta2" id="btnAposta2">
+                <img src="images/aposta2_icon.png" alt="Escolher Aposta" class="rodape-img">
+            </div>
+            <div class="rodape-direita" id="btnEscolherAposta">
+                <img src="images/direita_icon.png" alt="Giros Automáticos" class="rodape-img">
+            </div>
+        </div>
+
+        <!-- Modal de seleção de aposta -->
+        <div id="modalAposta" class="modal">
+            <div class="modal-content">
+                <span class="close">×</span>
+                <h2>Escolha o valor da aposta</h2>
+                <div class="opcoes-aposta">
+                    <button class="opcao-aposta" data-aposta="0.50">R$0,50</button>
+                    <button class="opcao-aposta" data-aposta="0.80">R$0,80</button>
+                    <button class="opcao-aposta" data-aposta="1.00">R$1,00</button>
+                    <button class="opcao-aposta" data-aposta="2.00">R$2,00</button>
+                    <button class="opcao-aposta" data-aposta="3.00">R$3,00</button>
+                    <button class="opcao-aposta" data-aposta="4.00">R$4,00</button>
+                    <button class="opcao-aposta" data-aposta="5.00">R$5,00</button>
+                    <button class="opcao-aposta" data-aposta="10.00">R$10,00</button>
+                    <button class="opcao-aposta" data-aposta="20.00">R$20,00</button>
+                    <button class="opcao-aposta" data-aposta="50.00">R$50,00</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Tabela de Pagamentos -->
+        <div id="modalPagamentos" class="modal">
+            <div class="modal-content">
+                <span class="close">×</span>
+                <h2>Tabela de Pagamentos</h2>
+                <div class="pagamentos-grid">
+                    <div class="pagamento-item">
+                        <img src="images/wild.png" alt="Wild">
+                        <span>250</span>
+                    </div>
+                    <div class="pagamento-item">
+                        <img src="images/dragao.png" alt="Dragão">
+                        <span>100</span>
+                    </div>
+                    <div class="pagamento-item">
+                        <img src="images/sorte.png" alt="Sorte">
+                        <span>25</span>
+                    </div>
+                    <div class="pagamento-item">
+                        <img src="images/dinheiro.png" alt="Dinheiro">
+                        <span>10</span>
+                    </div>
+                    <div class="pagamento-item">
+                        <img src="images/btngirar.png" alt="Botão Girar">
+                        <span>8</span>
+                    </div>
+                    <div class="pagamento-item">
+                        <img src="images/simbolo1.png" alt="Simbolo 1">
+                        <span>5</span>
+                    </div>
+                    <div class="pagamento-item">
+                        <img src="images/simbolo2.png" alt="Simbolo 2">
+                        <span>3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Giros Automáticos -->
+        <div id="modalGirosAutomaticos" class="modal">
+            <div class="modal-content">
+                <span class="close">×</span>
+                <h2>Escolha a quantidade de giros automáticos</h2>
+                <div class="opcoes-giros">
+                    <button class="opcao-giros" data-giros="2">2 Giros</button>
+                    <button class="opcao-giros" data-giros="3">3 Giros</button>
+                    <button class="opcao-giros" data-giros="4">4 Giros</button>
+                    <button class="opcao-giros" data-giros="5">5 Giros</button>
+                    <button class="opcao-giros" data-giros="6">6 Giros</button>
+                    <button class="opcao-giros" data-giros="7">7 Giros</button>
+                    <button class="opcao-giros" data-giros="8">8 Giros</button>
+                    <button class="opcao-giros" data-giros="9">9 Giros</button>
+                    <button class="opcao-giros" data-giros="10">10 Giros</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Conteúdo do script.js
+        function formatarMoeda(valor) {
+            return "R$" + valor.toFixed(2).replace('.', ',');
+        }
+
+        let creditos = 20.00;
+        let turboAtivo = false;
+        let caixa = 0.00;
+        let caixaReserva = 0.00;
+        let girosAutomaticos = 0;
+        let girandoAutomaticamente = false;
+
+        const btnEscolherAposta = document.getElementById('btnEscolherAposta');
+        const btnAposta2 = document.getElementById('btnAposta2');
+        const modalAposta = document.getElementById('modalAposta');
+        const spanCloseAposta = modalAposta ? modalAposta.querySelector('.close') : null;
+        const opcoesAposta = modalAposta ? modalAposta.querySelectorAll('.opcao-aposta') : [];
+        const modalPagamentos = document.getElementById('modalPagamentos');
+        const spanClosePagamentos = modalPagamentos ? modalPagamentos.querySelector('.close') : null;
+        const modalGirosAutomaticos = document.getElementById('modalGirosAutomaticos');
+        const spanCloseGiros = modalGirosAutomaticos ? modalGirosAutomaticos.querySelector('.close') : null;
+        const opcoesGiros = modalGirosAutomaticos ? modalGirosAutomaticos.querySelectorAll('.opcao-giros') : [];
+        const valorApostaElement = document.getElementById('valorAposta');
+        const creditosElement = document.getElementById('creditos');
+        const resultadoElement = document.getElementById('resultado');
+        const mensagemAnimada = document.querySelector('.mensagem-animada');
+        const botaoGirar = document.querySelector('.rodape-meio img');
+        const subPaginaDireita = document.querySelector('.sub-pagina-direita');
+
+        const somFundo = new Audio('sounds/fundo.mp3');
+        const somRoleta = new Audio('sounds/roleta.mp3');
+        const somParar = new Audio('sounds/parar.mp3');
+
+        const simbolos = ["images/btngirar.png", "images/dragao.png", "images/dinheiro.png", "images/sorte.png"];
+        const rolos = document.querySelectorAll('.simbolos');
+        const alturaSimbolo = 195;
+        const simbolosVisiveis = 3;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (botaoGirar) {
+                botaoGirar.classList.add('girarDevagar');
+                botaoGirar.classList.remove('girarRapido');
+            }
+            somFundo.loop = true;
+            somFundo.play();
+            preencherRolos();
+            if (subPaginaDireita) {
+                subPaginaDireita.textContent = `Caixa: ${formatarMoeda(caixa)}`;
+            }
+        });
+
+        if (btnEscolherAposta) {
+            btnEscolherAposta.addEventListener('click', function() {
+                if (modalGirosAutomaticos) modalGirosAutomaticos.style.display = 'block';
+            });
+        }
+
+        if (btnAposta2) {
+            btnAposta2.addEventListener('click', function() {
+                if (modalAposta) modalAposta.style.display = 'block';
+            });
+        }
+
+        if (spanCloseAposta) {
+            spanCloseAposta.addEventListener('click', function() {
+                if (modalAposta) modalAposta.style.display = 'none';
+            });
+        }
+
+        if (modalAposta) {
+            modalAposta.addEventListener('click', function(event) {
+                if (event.target === modalAposta) {
+                    modalAposta.style.display = 'none';
+                }
+            });
+        }
+
+        opcoesAposta.forEach(function(botao) {
+            botao.addEventListener('click', function() {
+                const novoValor = parseFloat(botao.getAttribute('data-aposta'));
+                if (valorApostaElement) valorApostaElement.textContent = formatarMoeda(novoValor);
+                if (modalAposta) modalAposta.style.display = 'none';
+            });
+        });
+
+        function mostrarModalPagamentos() {
+            if (modalPagamentos) modalPagamentos.style.display = 'block';
+        }
+
+        if (spanClosePagamentos) {
+            spanClosePagamentos.addEventListener('click', function() {
+                if (modalPagamentos) modalPagamentos.style.display = 'none';
+            });
+        }
+
+        if (modalPagamentos) {
+            modalPagamentos.addEventListener('click', function(event) {
+                if (event.target === modalPagamentos) {
+                    modalPagamentos.style.display = 'none';
+                }
+            });
+        }
+
+        if (spanCloseGiros) {
+            spanCloseGiros.addEventListener('click', function() {
+                if (modalGirosAutomaticos) modalGirosAutomaticos.style.display = 'none';
+            });
+        }
+
+        if (modalGirosAutomaticos) {
+            modalGirosAutomaticos.addEventListener('click', function(event) {
+                if (event.target === modalGirosAutomaticos) {
+                    modalGirosAutomaticos.style.display = 'none';
+                }
+            });
+        }
+
+        opcoesGiros.forEach(function(botao) {
+            botao.addEventListener('click', function() {
+                girosAutomaticos = parseInt(botao.getAttribute('data-giros'));
+                if (modalGirosAutomaticos) modalGirosAutomaticos.style.display = 'none';
+                iniciarGirosAutomaticos();
+            });
+        });
+
+        function toggleTurbo() {
+            turboAtivo = !turboAtivo;
+            const rodapeEsquerda = document.querySelector('.rodape-esquerda');
+            if (rodapeEsquerda) {
+                if (turboAtivo) {
+                    rodapeEsquerda.classList.add('turbo-ativo');
+                } else {
+                    rodapeEsquerda.classList.remove('turbo-ativo');
+                }
+            }
+        }
+
+        function resetBlink() {
+            document.querySelectorAll('.blink').forEach(el => {
+                el.classList.remove('blink');
+            });
+        }
+
+        function preencherRolos() {
+            rolos.forEach(rolo => {
+                rolo.innerHTML = '';
+                for (let i = 0; i < 15; i++) {
+                    let simbolo = document.createElement("div");
+                    simbolo.classList.add("simbolo");
+                    let img = document.createElement("img");
+                    img.src = simbolos[Math.floor(Math.random() * simbolos.length)];
+                    img.style.width = "100%";
+                    img.style.height = "100%";
+                    simbolo.appendChild(img);
+                    rolo.appendChild(simbolo);
+                }
+            });
+        }
+
+        function girarRolos() {
+            const apostaTexto = valorApostaElement ? valorApostaElement.textContent.replace('R$', '').replace(',', '.') : '0';
+            const aposta = parseFloat(apostaTexto);
+            if (creditos < aposta) {
+                alert("Créditos insuficientes!");
+                if (girandoAutomaticamente) {
+                    girosAutomaticos = 0;
+                    girandoAutomaticamente = false;
+                }
+                return;
+            }
+
+            const overlay = document.getElementById('overlayCombinacao');
+            if (overlay) overlay.style.display = 'none';
+
+            if (botaoGirar) {
+                botaoGirar.classList.remove('girarDevagar');
+                botaoGirar.classList.add('girarRapido');
+                somRoleta.play();
+            }
+
+            const valorCaixa = aposta * 0.10;
+            const valorReserva = aposta * 0.90;
+            caixa += valorCaixa;
+            caixaReserva += valorReserva;
+            if (subPaginaDireita) subPaginaDireita.textContent = `Caixa: ${formatarMoeda(caixa)}`;
+
+            resetBlink();
+            let resultadoSimbolos = [[], [], []];
+            let posicoesAleatorias = [];
+
+            const tempoSpin = turboAtivo ? 400 : 900;
+
+            rolos.forEach((rolo, index) => {
+                rolo.style.animation = 'none';
+                void rolo.offsetWidth;
+                rolo.style.animation = `rolar ${tempoSpin / 1000}s linear`;
+
+                setTimeout(() => {
+                    const totalSimbolos = rolo.children.length;
+                    const posicaoAleatoria = Math.floor(Math.random() * (totalSimbolos - simbolosVisiveis));
+                    posicoesAleatorias.push(posicaoAleatoria);
+                    const posicaoFinal = -(posicaoAleatoria * alturaSimbolo);
+                    const offsetCorrecao = (alturaSimbolo * simbolosVisiveis) / 3;
+                    rolo.style.transform = `translateY(${posicaoFinal + offsetCorrecao}px)`;
+                    rolo.style.animation = '';
+
+                    for (let i = 0; i < simbolosVisiveis; i++) {
+                        resultadoSimbolos[i].push(rolo.children[posicaoAleatoria + i].querySelector('img'));
+                    }
+
+                    if (index === rolos.length - 1) {
+                        verificarVitoria(resultadoSimbolos);
+                        exibirMatriz(resultadoSimbolos);
+                        piscarCombinacao(resultadoSimbolos, posicoesAleatorias);
+                        if (botaoGirar) {
+                            botaoGirar.classList.remove('girarRapido');
+                            botaoGirar.classList.add('girarDevagar');
+                        }
+                        somRoleta.pause();
+                        somRoleta.currentTime = 0;
+                        somParar.play();
+
+                        if (girandoAutomaticamente && girosAutomaticos > 0) {
+                            girosAutomaticos--;
+                            if (girosAutomaticos > 0) {
+                                setTimeout(girarRolos, tempoSpin + 1000);
+                            } else {
+                                girandoAutomaticamente = false;
+                            }
+                        }
+                    }
+                }, tempoSpin);
+            });
+        }
+
+        function iniciarGirosAutomaticos() {
+            if (girosAutomaticos > 0 && !girandoAutomaticamente) {
+                girandoAutomaticamente = true;
+                girarRolos();
+            }
+        }
+
+        function verificarVitoria(resultadoSimbolos) {
+            let vitoria = false;
+            let winningSymbol = null;
+            const apostaTexto = valorApostaElement ? valorApostaElement.textContent.replace('R$', '').replace(',', '.') : '0';
+            const aposta = parseFloat(apostaTexto);
+            let ganho = 0;
+
+            for (let i = 0; i < simbolosVisiveis; i++) {
+                if (
+                    resultadoSimbolos[i][0].src === resultadoSimbolos[i][1].src &&
+                    resultadoSimbolos[i][1].src === resultadoSimbolos[i][2].src
+                ) {
+                    vitoria = true;
+                    winningSymbol = resultadoSimbolos[i][0].src;
+                    break;
+                }
+            }
+
+            if (!vitoria) {
+                for (let j = 0; j < simbolosVisiveis; j++) {
+                    if (
+                        resultadoSimbolos[0][j].src === resultadoSimbolos[1][j].src &&
+                        resultadoSimbolos[1][j].src === resultadoSimbolos[2][j].src
+                    ) {
+                        vitoria = true;
+                        winningSymbol = resultadoSimbolos[0][j].src;
+                        break;
+                    }
+                }
+            }
+
+            if (!vitoria) {
+                if (
+                    resultadoSimbolos[0][0].src === resultadoSimbolos[1][1].src &&
+                    resultadoSimbolos[1][1].src === resultadoSimbolos[2][2].src
+                ) {
+                    vitoria = true;
+                    winningSymbol = resultadoSimbolos[0][0].src;
+                }
+            }
+
+            if (!vitoria) {
+                if (
+                    resultadoSimbolos[0][2].src === resultadoSimbolos[1][1].src &&
+                    resultadoSimbolos[1][1].src === resultadoSimbolos[2][0].src
+                ) {
+                    vitoria = true;
+                    winningSymbol = resultadoSimbolos[0][2].src;
+                }
+            }
+
+            if (vitoria) {
+                if (winningSymbol.includes("images/btngirar.png")) {
+                    ganho = aposta * 10;
+                    creditos += ganho;
+                } else if (winningSymbol.includes("images/dragao.png")) {
+                    ganho = aposta * 2;
+                    creditos += ganho;
+                } else if (winningSymbol.includes("images/dinheiro.png")) {
+                    ganho = aposta * 3;
+                    creditos += ganho;
+                } else if (winningSymbol.includes("images/sorte.png")) {
+                    ganho = aposta * 0.8;
+                    creditos += ganho;
+                }
+                if (resultadoElement) resultadoElement.textContent = "";
+                if (mensagemAnimada) mensagemAnimada.textContent = formatarMoeda(ganho);
+                setTimeout(() => {
+                    mostrarImagemCombinacao(winningSymbol, ganho);
+                }, 1500);
+            } else {
+                creditos -= aposta;
+                if (resultadoElement) resultadoElement.textContent = "";
+                if (mensagemAnimada) mensagemAnimada.textContent = "BEM-VINDO AO JOGO DO PALHAÇO";
+            }
+
+            if (creditosElement) creditosElement.textContent = formatarMoeda(creditos);
+        }
+
+        function exibirMatriz(resultadoSimbolos) {
+            const matrizTexto = resultadoSimbolos.map(linha => 
+                linha.map(img => img.src.split('/').pop()).join(' | ')
+            ).join('\n');
+            const matrizCombinacao = document.getElementById('matrizCombinacao');
+            if (matrizCombinacao) matrizCombinacao.value = matrizTexto;
+        }
+
+        function piscarCombinacao(resultadoSimbolos, posicoesAleatorias) {
+            let tipo = null;
+            let indice = null;
+
+            for (let i = 0; i < simbolosVisiveis; i++) {
+                if (
+                    resultadoSimbolos[i][0].src === resultadoSimbolos[i][1].src &&
+                    resultadoSimbolos[i][1].src === resultadoSimbolos[i][2].src
+                ) {
+                    tipo = 'horizontal';
+                    indice = i;
+                    break;
+                }
+            }
+
+            if (!tipo) {
+                for (let j = 0; j < simbolosVisiveis; j++) {
+                    if (
+                        resultadoSimbolos[0][j].src === resultadoSimbolos[1][j].src &&
+                        resultadoSimbolos[1][j].src === resultadoSimbolos[2][j].src
+                    ) {
+                        tipo = 'vertical';
+                        indice = j;
+                        break;
+                    }
+                }
+            }
+
+            if (!tipo) {
+                if (
+                    resultadoSimbolos[0][0].src === resultadoSimbolos[1][1].src &&
+                    resultadoSimbolos[1][1].src === resultadoSimbolos[2][2].src
+                ) {
+                    tipo = 'diagonal-ltr';
+                }
+            }
+
+            if (!tipo) {
+                if (
+                    resultadoSimbolos[0][2].src === resultadoSimbolos[1][1].src &&
+                    resultadoSimbolos[1][1].src === resultadoSimbolos[2][0].src
+                ) {
+                    tipo = 'diagonal-rtl';
+                }
+            }
+
+            if (tipo === 'horizontal') {
+                for (let j = 0; j < rolos.length; j++) {
+                    let el = rolos[j].children[posicoesAleatorias[j] + indice];
+                    el.classList.add('blink');
+                }
+            } else if (tipo === 'vertical') {
+                for (let i = 0; i < simbolosVisiveis; i++) {
+                    let el = rolos[indice].children[posicoesAleatorias[indice] + i];
+                    el.classList.add('blink');
+                }
+            } else if (tipo === 'diagonal-ltr') {
+                for (let i = 0; i < rolos.length; i++) {
+                    let el = rolos[i].children[posicoesAleatorias[i] + i];
+                    el.classList.add('blink');
+                }
+            } else if (tipo === 'diagonal-rtl') {
+                for (let i = 0; i < rolos.length; i++) {
+                    let rowIndex = simbolosVisiveis - 1 - i;
+                    let el = rolos[i].children[posicoesAleatorias[i] + rowIndex];
+                    el.classList.add('blink');
+                }
+            }
+        }
+
+        function mostrarImagemCombinacao(symbolSrc, ganho) {
+            const overlay = document.getElementById('overlayCombinacao');
+            const imagemCombinacao = document.getElementById('imagemCombinacao');
+            const ganhoTexto = document.getElementById('ganho-texto');
+
+            if (overlay && imagemCombinacao && ganhoTexto) {
+                imagemCombinacao.src = symbolSrc;
+                ganhoTexto.textContent = formatarMoeda(ganho);
+                overlay.style.display = 'flex';
+                if (botaoGirar) botaoGirar.classList.add('disabled');
+
+                setTimeout(() => {
+                    ganhoTexto.classList.add('fade-out');
+                    setTimeout(() => {
+                        ganhoTexto.textContent = "GERVÁSIO RIBEIRO";
+                        ganhoTexto.classList.remove('fade-out');
+                    }, 500);
+                }, 1500);
+
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    ganhoTexto.textContent = '';
+                    if (mensagemAnimada) mensagemAnimada.textContent = "BEM-VINDO AO JOGO DO PALHAÇO";
+                    if (botaoGirar) {
+                        botaoGirar.classList.remove('disabled');
+                        botaoGirar.classList.add('girarDevagar');
+                    }
+                    if (girandoAutomaticamente && girosAutomaticos > 0) {
+                        setTimeout(girarRolos, 500);
+                    }
+                }, 2000);
+
+                const overlayClose = overlay.querySelector('.overlay-close');
+                if (overlayClose) {
+                    overlayClose.onclick = function() {
+                        overlay.style.display = 'none';
+                        ganhoTexto.textContent = '';
+                        if (mensagemAnimada) mensagemAnimada.textContent = "BEM-VINDO AO JOGO DO PALHAÇO";
+                        if (botaoGirar) {
+                            botaoGirar.classList.remove('disabled');
+                            botaoGirar.classList.add('girarDevagar');
+                        }
+                        if (girandoAutomaticamente && girosAutomaticos > 0) {
+                            setTimeout(girarRolos, 500);
+                        }
+                    };
+                }
+            }
+        }
+    </script>
+</body>
+</html>
