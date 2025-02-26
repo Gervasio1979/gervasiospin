@@ -33,6 +33,43 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 10px;
+        }
+
+        .topo-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+            gap: 5px;
+        }
+
+        .topo-info span {
+            margin: 0 5px;
+        }
+
+        .topo-info input {
+            width: 60px;
+            padding: 2px;
+            font-size: 1em;
+            text-align: center;
+            background: #fff;
+            border: 1px solid #ffd700;
+            border-radius: 3px;
+            color: black;
+        }
+
+        .topo-controles {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
         }
 
         .pagina {
@@ -94,6 +131,11 @@
             color: white;
             font-size: 1.5em;
         }
+
+        .sub-pagina-direita {
+            flex-direction: column;
+        }
+
 
         .rodape {
             border: 1px solid #2A1F00;
@@ -190,6 +232,46 @@
 
         .rodape-direita:active {
             transform: scale(0.95);
+        }
+
+        .topo-forcar-sem-vitoria, .topo-forcar-ganho, .topo-forcar-bonus, .topo-forcar-btngirar {
+            height: 40px;
+            width: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url(images/fundo%20botao.JPG);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .topo-forcar-sem-vitoria.ativo {
+            border: 2px solid #ff0000; /* Vermelho para "Sem Vitória" */
+        }
+
+        .topo-forcar-ganho.ativo {
+            border: 2px solid #00ff00; /* Verde para "Ganho" */
+        }
+
+        .topo-forcar-bonus.ativo {
+            border: 2px solid #0000ff; /* Azul para "Bônus" */
+        }
+
+        .topo-forcar-btngirar.ativo {
+            border: 2px solid #ffff00; /* Amarelo para "Btngirar" */
+        }
+
+        .topo-forcar-sem-vitoria:active, .topo-forcar-ganho:active, .topo-forcar-bonus:active, .topo-forcar-btngirar:active {
+            transform: scale(0.95);
+        }
+
+        .topo-img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
         }
 
         .rifa-grid {
@@ -394,13 +476,13 @@
             box-shadow: 0 5px 15px rgba(255, 69, 0, 0.5);
         }
 
-        .opcao-aposta:hover,.opcao-giros:hover {
+        .opcao-aposta:hover, .opcao-giros:hover {
             background: linear-gradient(45deg, #ffa500, #ff4500);
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(255, 69, 0, 0.8);
         }
 
-        .opcao-aposta:active,.opcao-giros:active {
+        .opcao-aposta:active, .opcao-giros:active {
             transform: scale(0.95);
         }
 
@@ -518,7 +600,27 @@
 <body>
     <div class="geral">
         <div class="topo">
-            <div class="box-topo"></div>
+            <div class="topo-info">
+                <div>Total Apostado: <span id="totalApostado">R$0,00</span></div>
+                <div>Total Pago: <span id="totalPago">R$0,00</span></div>
+                <div>RTP Atual: <span id="rtpAtual">0.00%</span></div>
+                <div>RTP Alvo: <input type="number" id="rtpAlvo" min="0" max="100" step="1" value="95">%</div>
+                <div>Limite Lucro Casa: <input type="number" id="limiteLucroCasa" min="0" max="100" step="1" value="5">%</div>
+            </div>
+            <div class="topo-controles">
+                <div class="topo-forcar-sem-vitoria" id="btnForcarSemVitoria" onclick="toggleForcarSemVitoria()">
+                    <img src="images/sem_vitoria_icon.png" alt="Forçar Sem Vitória" class="topo-img">
+                </div>
+                <div class="topo-forcar-ganho" id="btnForcarGanho" onclick="toggleForcarGanho()">
+                    <img src="images/ganho_icon.png" alt="Forçar Ganho" class="topo-img">
+                </div>
+                <div class="topo-forcar-bonus" id="btnForcarBonus" onclick="toggleForcarBonus()">
+                    <img src="images/bonus_icon.png" alt="Forçar Bônus" class="topo-img">
+                </div>
+                <div class="topo-forcar-btngirar" id="btnForcarBtngirar" onclick="toggleForcarBtngirar()">
+                    <img src="images/btngirar.png" alt="Forçar Btngirar" class="topo-img">
+                </div>
+            </div>
         </div>
         
         <div class="pagina">
@@ -550,7 +652,10 @@
         <div class="sub-pagina">
             <div class="sub-pagina-esquerda">Créditos: <span id="creditos">R$20,00</span></div>
             <div class="sub-pagina-meio">Valor da aposta: <span id="valorAposta">R$1,00</span></div>
-            <div class="sub-pagina-direita">Caixa: R$0,00</div>
+            <div class="sub-pagina-direita">
+                <div>Caixa: <span id="caixa">R$0,00</span></div>
+                <div>Reserva: <span id="caixaReserva">R$150,00</span></div>
+            </div>
         </div>
 
         <div class="rodape">
@@ -658,12 +763,72 @@
         let creditos = 20.00;
         let turboAtivo = false;
         let caixa = 0.00;
-        let caixaReserva = 0.00;
+        let caixaReserva = 150.00; // Inicia com R$150,00
         let girosAutomaticos = 0;
         let girandoAutomaticamente = false;
+        let forcarSemVitoria = false;
+        let forcarGanho = false;
+        let forcarBonus = false;
+        let forcarBtngirar = false;
+        let totalApostado = 0.00; // Total apostado pelo jogador
+        let totalPago = 0.00;    // Total pago ao jogador (ganhos)
+        let RTP_ALVO = 0.95;     // RTP alvo inicial de 95%
+        let LIMITE_LUCRO_CASA = 0.05; // Lucro mínimo da casa inicial de 5%
+
+        // Matrizes pré-definidas sem combinações vencedoras (8 combinações)
+        const matrizesSemVitoria = [
+            [["images/btngirar.png", "images/dragao.png", "images/dinheiro.png"], ["images/sorte.png", "images/dinheiro.png", "images/btngirar.png"], ["images/dragao.png", "images/sorte.png", "images/dinheiro.png"]],
+            [["images/dragao.png", "images/sorte.png", "images/btngirar.png"], ["images/dinheiro.png", "images/btngirar.png", "images/dragao.png"], ["images/sorte.png", "images/dinheiro.png", "images/sorte.png"]],
+            [["images/sorte.png", "images/dinheiro.png", "images/dragao.png"], ["images/btngirar.png", "images/sorte.png", "images/dinheiro.png"], ["images/dragao.png", "images/btngirar.png", "images/sorte.png"]],
+            [["images/dinheiro.png", "images/btngirar.png", "images/sorte.png"], ["images/dragao.png", "images/dinheiro.png", "images/sorte.png"], ["images/sorte.png", "images/dragao.png", "images/btngirar.png"]],
+            [["images/btngirar.png", "images/sorte.png", "images/dinheiro.png"], ["images/dragao.png", "images/dinheiro.png", "images/sorte.png"], ["images/sorte.png", "images/btngirar.png", "images/dragao.png"]],
+            [["images/dragao.png", "images/dinheiro.png", "images/sorte.png"], ["images/sorte.png", "images/btngirar.png", "images/dragao.png"], ["images/dinheiro.png", "images/sorte.png", "images/btngirar.png"]],
+            [["images/sorte.png", "images/btngirar.png", "images/dragao.png"], ["images/dinheiro.png", "images/dragao.png", "images/sorte.png"], ["images/btngirar.png", "images/dinheiro.png", "images/sorte.png"]],
+            [["images/dinheiro.png", "images/sorte.png", "images/btngirar.png"], ["images/dragao.png", "images/sorte.png", "images/dinheiro.png"], ["images/sorte.png", "images/btngirar.png", "images/dragao.png"]]
+        ];
+
+        // Matrizes pré-definidas com combinações vencedoras (8 combinações)
+        const matrizesGanho = [
+            [["images/dragao.png", "images/dragao.png", "images/dragao.png"], ["images/sorte.png", "images/btngirar.png", "images/dinheiro.png"], ["images/dinheiro.png", "images/sorte.png", "images/btngirar.png"]], // Linha 1
+            [["images/sorte.png", "images/dinheiro.png", "images/btngirar.png"], ["images/dragao.png", "images/dragao.png", "images/dragao.png"], ["images/btngirar.png", "images/sorte.png", "images/dinheiro.png"]], // Linha 2
+            [["images/dinheiro.png", "images/sorte.png", "images/btngirar.png"], ["images/sorte.png", "images/btngirar.png", "images/dinheiro.png"], ["images/dragao.png", "images/dragao.png", "images/dragao.png"]], // Linha 3
+            [["images/dinheiro.png", "images/dinheiro.png", "images/dinheiro.png"], ["images/sorte.png", "images/btngirar.png", "images/dragao.png"], ["images/btngirar.png", "images/sorte.png", "images/dragao.png"]], // Coluna 1
+            [["images/sorte.png", "images/dinheiro.png", "images/btngirar.png"], ["images/dragao.png", "images/dinheiro.png", "images/sorte.png"], ["images/btngirar.png", "images/dinheiro.png", "images/dragao.png"]], // Coluna 2
+            [["images/dragao.png", "images/sorte.png", "images/sorte.png"], ["images/btngirar.png", "images/dinheiro.png", "images/sorte.png"], ["images/sorte.png", "images/dragao.png", "images/sorte.png"]], // Coluna 3
+            [["images/dinheiro.png", "images/dinheiro.png", "images/dinheiro.png"], ["images/sorte.png", "images/dinheiro.png", "images/dragao.png"], ["images/dragao.png", "images/sorte.png", "images/dinheiro.png"]], // Diagonal 1
+            [["images/sorte.png", "images/dragao.png", "images/dinheiro.png"], ["images/dinheiro.png", "images/sorte.png", "images/btngirar.png"], ["images/dinheiro.png", "images/sorte.png", "images/dragao.png"]] // Diagonal 2
+        ];
+
+        // Matrizes pré-definidas de bônus (8 combinações com 9 símbolos iguais)
+        const matrizesBonus = [
+            [["images/btngirar.png", "images/btngirar.png", "images/btngirar.png"], ["images/btngirar.png", "images/btngirar.png", "images/btngirar.png"], ["images/btngirar.png", "images/btngirar.png", "images/btngirar.png"]],
+            [["images/dragao.png", "images/dragao.png", "images/dragao.png"], ["images/dragao.png", "images/dragao.png", "images/dragao.png"], ["images/dragao.png", "images/dragao.png", "images/dragao.png"]],
+            [["images/dinheiro.png", "images/dinheiro.png", "images/dinheiro.png"], ["images/dinheiro.png", "images/dinheiro.png", "images/dinheiro.png"], ["images/dinheiro.png", "images/dinheiro.png", "images/dinheiro.png"]],
+            [["images/sorte.png", "images/sorte.png", "images/sorte.png"], ["images/sorte.png", "images/sorte.png", "images/sorte.png"], ["images/sorte.png", "images/sorte.png", "images/sorte.png"]],
+            [["images/btngirar.png", "images/btngirar.png", "images/btngirar.png"], ["images/btngirar.png", "images/btngirar.png", "images/btngirar.png"], ["images/btngirar.png", "images/btngirar.png", "images/btngirar.png"]],
+            [["images/dragao.png", "images/dragao.png", "images/dragao.png"], ["images/dragao.png", "images/dragao.png", "images/dragao.png"], ["images/dragao.png", "images/dragao.png", "images/dragao.png"]],
+            [["images/dinheiro.png", "images/dinheiro.png", "images/dinheiro.png"], ["images/dinheiro.png", "images/dinheiro.png", "images/dinheiro.png"], ["images/dinheiro.png", "images/dinheiro.png", "images/dinheiro.png"]],
+            [["images/sorte.png", "images/sorte.png", "images/sorte.png"], ["images/sorte.png", "images/sorte.png", "images/sorte.png"], ["images/sorte.png", "images/sorte.png", "images/sorte.png"]]
+        ];
+
+        // Matrizes pré-definidas com todas as 8 combinações possíveis de vitória com "btngirar"
+        const matrizesBtngirar = [
+            [["images/btngirar.png", "images/btngirar.png", "images/btngirar.png"], ["images/dragao.png", "images/sorte.png", "images/dinheiro.png"], ["images/sorte.png", "images/dinheiro.png", "images/dragao.png"]], // Linha 1
+            [["images/dragao.png", "images/sorte.png", "images/dinheiro.png"], ["images/btngirar.png", "images/btngirar.png", "images/btngirar.png"], ["images/sorte.png", "images/dinheiro.png", "images/dragao.png"]], // Linha 2
+            [["images/dragao.png", "images/sorte.png", "images/dinheiro.png"], ["images/sorte.png", "images/dinheiro.png", "images/dragao.png"], ["images/btngirar.png", "images/btngirar.png", "images/btngirar.png"]], // Linha 3
+            [["images/btngirar.png", "images/dragao.png", "images/sorte.png"], ["images/btngirar.png", "images/dinheiro.png", "images/sorte.png"], ["images/btngirar.png", "images/sorte.png", "images/dinheiro.png"]], // Coluna 1
+            [["images/dragao.png", "images/btngirar.png", "images/sorte.png"], ["images/sorte.png", "images/btngirar.png", "images/dinheiro.png"], ["images/dinheiro.png", "images/btngirar.png", "images/dragao.png"]], // Coluna 2
+            [["images/dragao.png", "images/sorte.png", "images/btngirar.png"], ["images/sorte.png", "images/dinheiro.png", "images/btngirar.png"], ["images/dinheiro.png", "images/dragao.png", "images/btngirar.png"]], // Coluna 3
+            [["images/btngirar.png", "images/dragao.png", "images/sorte.png"], ["images/sorte.png", "images/btngirar.png", "images/dinheiro.png"], ["images/dinheiro.png", "images/sorte.png", "images/btngirar.png"]], // Diagonal 1
+            [["images/dragao.png", "images/sorte.png", "images/btngirar.png"], ["images/sorte.png", "images/btngirar.png", "images/dinheiro.png"], ["images/btngirar.png", "images/dinheiro.png", "images/dragao.png"]] // Diagonal 2
+        ];
 
         const btnEscolherAposta = document.getElementById('btnEscolherAposta');
         const btnAposta2 = document.getElementById('btnAposta2');
+        const btnForcarSemVitoria = document.getElementById('btnForcarSemVitoria');
+        const btnForcarGanho = document.getElementById('btnForcarGanho');
+        const btnForcarBonus = document.getElementById('btnForcarBonus');
+        const btnForcarBtngirar = document.getElementById('btnForcarBtngirar');
         const modalAposta = document.getElementById('modalAposta');
         const spanCloseAposta = modalAposta ? modalAposta.querySelector('.close') : null;
         const opcoesAposta = modalAposta ? modalAposta.querySelectorAll('.opcao-aposta') : [];
@@ -674,10 +839,16 @@
         const opcoesGiros = modalGirosAutomaticos ? modalGirosAutomaticos.querySelectorAll('.opcao-giros') : [];
         const valorApostaElement = document.getElementById('valorAposta');
         const creditosElement = document.getElementById('creditos');
+        const caixaElement = document.getElementById('caixa');
+        const caixaReservaElement = document.getElementById('caixaReserva');
+        const totalApostadoElement = document.getElementById('totalApostado');
+        const totalPagoElement = document.getElementById('totalPago');
+        const rtpAtualElement = document.getElementById('rtpAtual');
+        const rtpAlvoInput = document.getElementById('rtpAlvo');
+        const limiteLucroCasaInput = document.getElementById('limiteLucroCasa');
         const resultadoElement = document.getElementById('resultado');
         const mensagemAnimada = document.querySelector('.mensagem-animada');
         const botaoGirar = document.querySelector('.rodape-meio img');
-        const subPaginaDireita = document.querySelector('.sub-pagina-direita');
 
         const somFundo = new Audio('sounds/fundo.mp3');
         const somRoleta = new Audio('sounds/roleta.mp3');
@@ -696,9 +867,17 @@
             somFundo.loop = true;
             somFundo.play();
             preencherRolos();
-            if (subPaginaDireita) {
-                subPaginaDireita.textContent = `Caixa: ${formatarMoeda(caixa)}`;
-            }
+            atualizarCaixa();
+
+            // Listeners para ajustar RTP_ALVO e LIMITE_LUCRO_CASA
+            rtpAlvoInput.addEventListener('change', () => {
+                RTP_ALVO = parseFloat(rtpAlvoInput.value) / 100;
+                ajustarRTP();
+            });
+            limiteLucroCasaInput.addEventListener('change', () => {
+                LIMITE_LUCRO_CASA = parseFloat(limiteLucroCasaInput.value) / 100;
+                ajustarRTP();
+            });
         });
 
         if (btnEscolherAposta) {
@@ -787,6 +966,148 @@
             }
         }
 
+        function toggleForcarSemVitoria() {
+            forcarSemVitoria = !forcarSemVitoria;
+            forcarGanho = false;
+            forcarBonus = false;
+            forcarBtngirar = false;
+            const topoForcarSemVitoria = document.getElementById('btnForcarSemVitoria');
+            const topoForcarGanho = document.getElementById('btnForcarGanho');
+            const topoForcarBonus = document.getElementById('btnForcarBonus');
+            const topoForcarBtngirar = document.getElementById('btnForcarBtngirar');
+            if (topoForcarSemVitoria) {
+                if (forcarSemVitoria) {
+                    topoForcarSemVitoria.classList.add('ativo');
+                    topoForcarGanho.classList.remove('ativo');
+                    topoForcarBonus.classList.remove('ativo');
+                    topoForcarBtngirar.classList.remove('ativo');
+                } else {
+                    topoForcarSemVitoria.classList.remove('ativo');
+                }
+            }
+            atualizarForcarSemVitoria(); // Atualiza automaticamente com base no valor da reserva
+        }
+
+        function toggleForcarGanho() {
+            forcarGanho = !forcarGanho;
+            forcarSemVitoria = false;
+            forcarBonus = false;
+            forcarBtngirar = false;
+            const topoForcarSemVitoria = document.getElementById('btnForcarSemVitoria');
+            const topoForcarGanho = document.getElementById('btnForcarGanho');
+            const topoForcarBonus = document.getElementById('btnForcarBonus');
+            const topoForcarBtngirar = document.getElementById('btnForcarBtngirar');
+            if (topoForcarGanho) {
+                if (forcarGanho) {
+                    topoForcarGanho.classList.add('ativo');
+                    topoForcarSemVitoria.classList.remove('ativo');
+                    topoForcarBonus.classList.remove('ativo');
+                    topoForcarBtngirar.classList.remove('ativo');
+                } else {
+                    topoForcarGanho.classList.remove('ativo');
+                }
+            }
+        }
+
+        function toggleForcarBonus() {
+            forcarBonus = !forcarBonus;
+            forcarSemVitoria = false;
+            forcarGanho = false;
+            forcarBtngirar = false;
+            const topoForcarSemVitoria = document.getElementById('btnForcarSemVitoria');
+            const topoForcarGanho = document.getElementById('btnForcarGanho');
+            const topoForcarBonus = document.getElementById('btnForcarBonus');
+            const topoForcarBtngirar = document.getElementById('btnForcarBtngirar');
+            if (topoForcarBonus) {
+                if (forcarBonus) {
+                    topoForcarBonus.classList.add('ativo');
+                    topoForcarSemVitoria.classList.remove('ativo');
+                    topoForcarGanho.classList.remove('ativo');
+                    topoForcarBtngirar.classList.remove('ativo');
+                } else {
+                    topoForcarBonus.classList.remove('ativo');
+                }
+            }
+        }
+
+        function toggleForcarBtngirar() {
+            forcarBtngirar = !forcarBtngirar;
+            forcarSemVitoria = false;
+            forcarGanho = false;
+            forcarBonus = false;
+            const topoForcarSemVitoria = document.getElementById('btnForcarSemVitoria');
+            const topoForcarGanho = document.getElementById('btnForcarGanho');
+            const topoForcarBonus = document.getElementById('btnForcarBonus');
+            const topoForcarBtngirar = document.getElementById('btnForcarBtngirar');
+            if (topoForcarBtngirar) {
+                if (forcarBtngirar) {
+                    topoForcarBtngirar.classList.add('ativo');
+                    topoForcarSemVitoria.classList.remove('ativo');
+                    topoForcarGanho.classList.remove('ativo');
+                    topoForcarBonus.classList.remove('ativo');
+                } else {
+                    topoForcarBtngirar.classList.remove('ativo');
+                }
+            }
+        }
+
+        function atualizarCaixa() {
+            if (caixaElement) caixaElement.textContent = formatarMoeda(caixa);
+            if (caixaReservaElement) caixaReservaElement.textContent = formatarMoeda(caixaReserva);
+            if (totalApostadoElement) totalApostadoElement.textContent = formatarMoeda(totalApostado);
+            if (totalPagoElement) totalPagoElement.textContent = formatarMoeda(totalPago);
+            if (rtpAtualElement) rtpAtualElement.textContent = (calcularRTP() * 100).toFixed(2) + '%';
+            atualizarForcarSemVitoria();
+        }
+
+        function atualizarForcarSemVitoria() {
+            const topoForcarSemVitoria = document.getElementById('btnForcarSemVitoria');
+            if (caixaReserva < 100.00) {
+                forcarSemVitoria = true;
+                topoForcarSemVitoria.classList.add('ativo');
+            } else {
+                forcarSemVitoria = false;
+                topoForcarSemVitoria.classList.remove('ativo');
+            }
+        }
+
+        function calcularRTP() {
+            if (totalApostado === 0) return 0;
+            return totalPago / totalApostado; // RTP em decimal (ex.: 0.95 para 95%)
+        }
+
+        function ajustarRTP() {
+            const rtpAtual = calcularRTP();
+            console.log(`RTP Atual: ${(rtpAtual * 100).toFixed(2)}%`);
+
+            if (rtpAtual > RTP_ALVO + LIMITE_LUCRO_CASA) { // Se RTP estiver acima do alvo + limite
+                forcarSemVitoria = true;
+                forcarGanho = false;
+                forcarBtngirar = false;
+            } else if (rtpAtual < RTP_ALVO - LIMITE_LUCRO_CASA) { // Se RTP estiver abaixo do alvo - limite
+                const escolha = Math.random() < 0.5 ? 'ganho' : 'btngirar';
+                forcarSemVitoria = false;
+                forcarGanho = escolha === 'ganho';
+                forcarBtngirar = escolha === 'btngirar';
+            } else {
+                // Dentro da margem aceitável, usa escolha manual ou aleatória
+                if (!forcarSemVitoria && !forcarGanho && !forcarBtngirar) {
+                    const escolha = Math.random();
+                    forcarSemVitoria = escolha < 0.7; // 70% de chance de sem vitória
+                    forcarGanho = escolha >= 0.7 && escolha < 0.85; // 15% de ganho
+                    forcarBtngirar = escolha >= 0.85; // 15% de btngirar
+                }
+            }
+
+            // Atualiza visualmente os botões
+            const topoForcarSemVitoria = document.getElementById('btnForcarSemVitoria');
+            const topoForcarGanho = document.getElementById('btnForcarGanho');
+            const topoForcarBtngirar = document.getElementById('btnForcarBtngirar');
+            topoForcarSemVitoria.classList.toggle('ativo', forcarSemVitoria);
+            topoForcarGanho.classList.toggle('ativo', forcarGanho);
+            topoForcarBtngirar.classList.toggle('ativo', forcarBtngirar);
+        }
+
         function resetBlink() {
             document.querySelectorAll('.blink').forEach(el => {
                 el.classList.remove('blink');
@@ -809,6 +1130,15 @@
             });
         }
 
+        function aplicarMatriz(resultadoSimbolos, matrizes) {
+            const matrizEscolhida = matrizes[Math.floor(Math.random() * matrizes.length)];
+            for (let i = 0; i < simbolosVisiveis; i++) {
+                for (let j = 0; j < rolos.length; j++) {
+                    resultadoSimbolos[i][j].src = matrizEscolhida[i][j];
+                }
+            }
+        }
+
         function girarRolos() {
             const apostaTexto = valorApostaElement ? valorApostaElement.textContent.replace('R$', '').replace(',', '.') : '0';
             const aposta = parseFloat(apostaTexto);
@@ -820,6 +1150,8 @@
                 }
                 return;
             }
+
+            totalApostado += aposta; // Adiciona aposta ao total apostado
 
             const overlay = document.getElementById('overlayCombinacao');
             if (overlay) overlay.style.display = 'none';
@@ -834,7 +1166,9 @@
             const valorReserva = aposta * 0.90;
             caixa += valorCaixa;
             caixaReserva += valorReserva;
-            if (subPaginaDireita) subPaginaDireita.textContent = `Caixa: ${formatarMoeda(caixa)}`;
+            atualizarCaixa();
+
+            ajustarRTP(); // Ajusta o RTP antes do giro
 
             resetBlink();
             let resultadoSimbolos = [[], [], []];
@@ -861,6 +1195,16 @@
                     }
 
                     if (index === rolos.length - 1) {
+                        if (forcarSemVitoria) {
+                            aplicarMatriz(resultadoSimbolos, matrizesSemVitoria);
+                        } else if (forcarGanho) {
+                            aplicarMatriz(resultadoSimbolos, matrizesGanho);
+                        } else if (forcarBonus) {
+                            aplicarMatriz(resultadoSimbolos, matrizesBonus);
+                        } else if (forcarBtngirar) {
+                            aplicarMatriz(resultadoSimbolos, matrizesBtngirar);
+                        }
+
                         verificarVitoria(resultadoSimbolos);
                         exibirMatriz(resultadoSimbolos);
                         piscarCombinacao(resultadoSimbolos, posicoesAleatorias);
@@ -946,17 +1290,25 @@
             if (vitoria) {
                 if (winningSymbol.includes("images/btngirar.png")) {
                     ganho = aposta * 10;
-                    creditos += ganho;
                 } else if (winningSymbol.includes("images/dragao.png")) {
                     ganho = aposta * 2;
-                    creditos += ganho;
                 } else if (winningSymbol.includes("images/dinheiro.png")) {
                     ganho = aposta * 3;
-                    creditos += ganho;
                 } else if (winningSymbol.includes("images/sorte.png")) {
                     ganho = aposta * 0.8;
-                    creditos += ganho;
                 }
+
+                // Desconta o ganho do caixaReserva e adiciona aos creditos
+                if (caixaReserva >= ganho) {
+                    caixaReserva -= ganho;
+                    creditos += ganho;
+                    totalPago += ganho; // Adiciona ao total pago
+                } else {
+                    creditos += caixaReserva;
+                    totalPago += caixaReserva; // Adiciona o que resta ao total pago
+                    caixaReserva = 0;
+                }
+
                 if (resultadoElement) resultadoElement.textContent = "";
                 if (mensagemAnimada) mensagemAnimada.textContent = formatarMoeda(ganho);
                 setTimeout(() => {
@@ -969,6 +1321,7 @@
             }
 
             if (creditosElement) creditosElement.textContent = formatarMoeda(creditos);
+            atualizarCaixa(); // Atualiza os valores de Caixa, Caixa Reserva e RTP na interface
         }
 
         function exibirMatriz(resultadoSimbolos) {
